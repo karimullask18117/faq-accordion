@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ Accordion</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --accent: #8000ff;
+    }
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #ffffff;
+      --accent: #00bfff;
+    }
+    [data-theme="style2"] {
+      --bg: #f0f8ff;
+      --text: #003366;
+      --accent: #336699;
+    }
+    [data-theme="style3"] {
+      --bg: #fef9e7;
+      --text: #784212;
+      --accent: #f4a300;
+    }
+    [data-theme="style4"] {
+      --bg: #f5f5f5;
+      --text: #2e2e2e;
+      --accent: #ff0055;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .accordion {
+      border-top: 1px solid #ccc;
+    }
+
+    .accordion-item {
+      border-bottom: 1px solid #ccc;
+    }
+
+    .accordion-title {
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 1rem;
+      font-weight: bold;
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 0 1rem 1rem 1rem;
+      color: #444;
+    }
+
+    .accordion-content.open {
+      display: block;
+    }
+
+    .toggle-mode, .style-picker {
+      position: fixed;
+      top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .toggle-mode {
+      right: 1rem;
+    }
+
+    .style-picker {
+      right: 130px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-mode" onclick="toggleTheme()">Toggle Theme</button>
+  <select class="style-picker" onchange="changeStyle(this.value)">
+    <option value="light">Style 1</option>
+    <option value="style2">Style 2</option>
+    <option value="style3">Style 3</option>
+    <option value="style4">Style 4</option>
+    <option value="dark">Dark</option>
+  </select>
+  <div class="container">
+    <h1>Frequently asked questions</h1>
+    <div class="accordion" id="faq">
+      <!-- Items will be injected by JS -->
+    </div>
+  </div>
+  <script>
+    const faqs = [
+      "Q1. Lorem ipsum dolor sit amet consectetur?",
+      "Q2. Lorem ipsum dolor sit amet consectetur?",
+      "Q3. Lorem ipsum dolor sit amet consectetur?",
+      "Q4. Lorem ipsum dolor sit amet consectetur?",
+      "Q5. Lorem ipsum dolor sit amet consectetur?",
+    ];
+
+    const content = `Lorem ipsum dolor sit amet consectetur. Sit amet vel suspendisse euismod.`;
+
+    const faqContainer = document.getElementById("faq");
+    faqs.forEach((q, i) => {
+      const item = document.createElement("div");
+      item.className = "accordion-item";
+      item.innerHTML = `
+        <div class="accordion-title" onclick="toggleAccordion(${i})">
+          <span>${q}</span>
+          <span id="icon-${i}">+</span>
+        </div>
+        <div class="accordion-content" id="content-${i}">${content}</div>
+      `;
+      faqContainer.appendChild(item);
+    });
+
+    function toggleAccordion(index) {
+      const content = document.getElementById(`content-${index}`);
+      const icon = document.getElementById(`icon-${index}`);
+      const isOpen = content.classList.contains("open");
+
+      document.querySelectorAll(".accordion-content").forEach(el => el.classList.remove("open"));
+      document.querySelectorAll(".accordion-title span:last-child").forEach(el => el.textContent = "+");
+
+      if (!isOpen) {
+        content.classList.add("open");
+        icon.textContent = "-";
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute("data-theme");
+      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    }
+
+    function changeStyle(value) {
+      document.documentElement.setAttribute("data-theme", value);
+    }
+  </script>
+</body>
+</html>
